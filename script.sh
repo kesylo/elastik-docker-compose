@@ -61,6 +61,7 @@ sudo wget https://raw.githubusercontent.com/kesylo/elastik-docker-compose/master
 
 # run docker compose file
 sudo docker-compose -f docker-compose.yml up -d
+sleep 3
 sudo sysctl -w vm.max_map_count=262144
 
 # restart service
