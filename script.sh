@@ -12,8 +12,9 @@ touch output.log
 exec 3>&1 1>>output.log 2>&1
 
 # update pckg
-apt-get update -y
-apt-get dist-upgrade -y
+sudo apt-get update -y
+sudo apt-get dist-upgrade -y
+sudo apt-get install wget -y
 
 # install docker
 printf 'Installing docker...\n\n' 1>&3
@@ -53,14 +54,14 @@ sudo wget \
 # install elk
 printf 'Installing ElasticSearch...\n\n' 1>&3
 # get docker compose from github
-curl https://raw.githubusercontent.com/kesylo/elastik-docker-compose/master/docker-compose.yml --output docker-compose.yml
+sudo curl https://raw.githubusercontent.com/kesylo/elastik-docker-compose/master/docker-compose.yml --output docker-compose.yml
 
 # run docker compose file
-docker-compose up -d
+sudo docker-compose up -d
 
 # print elasticsearch health from API
 printf 'Get health check.\n\n' 1>&3
-curl localhost:9200/_cat/health 1>&3
+sudo curl localhost:9200/_cat/health 1>&3
 
 # cleanup
 sudo rm docker-compose.yml
