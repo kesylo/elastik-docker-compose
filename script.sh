@@ -12,6 +12,7 @@ touch output.log
 exec 3>&1 1>>output.log 2>&1
 
 # update pckg
+printf 'Update system...\n\n' 1>&3
 sudo apt-get update -y
 sudo apt-get dist-upgrade -y
 sudo apt-get install wget -y
