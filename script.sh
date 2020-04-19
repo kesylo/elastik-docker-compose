@@ -20,9 +20,9 @@ sudo apt-get install wget -y
 # install docker
 printf 'Installing docker...\n\n' 1>&3
 
-sudo apt-get remove --yes docker docker-engine docker.io containerd runc \
-    && sudo apt-get update \
-    && sudo apt-get --yes --no-install-recommends install \
+sudo apt remove --yes docker docker-engine docker.io containerd runc \
+    && sudo apt update \
+    && sudo apt --yes --no-install-recommends install \
         apt-transport-https \
         ca-certificates \
     && wget --quiet --output-document=- https://download.docker.com/linux/ubuntu/gpg \
@@ -31,8 +31,8 @@ sudo apt-get remove --yes docker docker-engine docker.io containerd runc \
         "deb [arch=$(dpkg --print-architecture)] https://download.docker.com/linux/ubuntu \
         $(lsb_release --codename --short) \
         stable" \
-    && sudo apt-get update \
-    && sudo apt-get --yes --no-install-recommends install docker-ce docker-ce-cli containerd.io \
+    && sudo apt update \
+    && sudo apt --yes --no-install-recommends install docker-ce docker-ce-cli containerd.io \
     && sudo usermod --append --groups docker "$USER" \
     && sudo systemctl enable docker \
     && printf '\nDocker installed successfully\n\n'
@@ -44,21 +44,26 @@ printf 'Docker running.\n\n' 1>&3
 # install docker compose
 printf 'Installing Docker Compose...\n' 1>&3
 sudo wget \
-        --output-document=/usr/bin/docker-compose \
+        --output-document=/usr/local/bin/docker-compose \
         https://github.com/docker/compose/releases/download/1.25.4/run.sh \
-    && sudo chmod +x /usr/bin/docker-compose \
+    && sudo chmod +x /usr/local/bin/docker-compose \
     && sudo wget \
         --output-document=/etc/bash_completion.d/docker-compose \
         "https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose" \
-    && printf '\nDocker Compose installed successfully.\n\n' 1>&3
+    && printf '\nDocker Compose installed successfully\n\n' 1>&3
 
 # install elk
 printf 'Installing ElasticSearch...\n\n' 1>&3
 # get docker compose from github
-sudo curl https://raw.githubusercontent.com/kesylo/elastik-docker-compose/master/docker-compose.yml --output docker-compose.yml
+sudo wget https://raw.githubusercontent.com/kesylo/elastik-docker-compose/master/docker-compose.yml
 
 # run docker compose file
 sudo docker-compose up -d
+sudo sysctl -w vm.max_map_count=262144
+
+# restart service
+printf 'Restarting ElasticSearch...\n\n' 1>&3
+sudo docker-compose restart elasticsearch
 
 # print elasticsearch health from API
 printf 'Get health check.\n\n' 1>&3
