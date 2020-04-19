@@ -11,6 +11,10 @@ touch output.log
 
 exec 3>&1 1>>output.log 2>&1
 
+# update pckg
+apt-get update -y
+apt-get dist-upgrade -y
+
 # install docker
 printf 'Installing docker...\n\n' 1>&3
 
