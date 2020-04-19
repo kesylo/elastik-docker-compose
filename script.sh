@@ -51,6 +51,8 @@ sudo wget \
         --output-document=/etc/bash_completion.d/docker-compose \
         "https://raw.githubusercontent.com/docker/compose/$(docker-compose version --short)/contrib/completion/bash/docker-compose" \
     && printf '\nDocker Compose installed successfully\n\n' 1>&3
+    
+sudo docker-compose --version
 
 # install elk
 printf 'Installing ElasticSearch...\n\n' 1>&3
@@ -58,12 +60,13 @@ printf 'Installing ElasticSearch...\n\n' 1>&3
 sudo wget https://raw.githubusercontent.com/kesylo/elastik-docker-compose/master/docker-compose.yml
 
 # run docker compose file
-sudo docker-compose up -d
+sudo docker-compose -f docker-compose.yml up -d
 sudo sysctl -w vm.max_map_count=262144
 
 # restart service
 printf 'Restarting ElasticSearch...\n\n' 1>&3
 sudo docker-compose restart elasticsearch
+sleep 3
 
 # print elasticsearch health from API
 printf 'Get health check.\n\n' 1>&3
